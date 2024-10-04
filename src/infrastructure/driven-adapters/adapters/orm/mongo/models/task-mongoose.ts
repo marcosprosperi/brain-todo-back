@@ -3,7 +3,7 @@ import { TaskEntity } from "@/domain/entities/task";
 
 const schema = new Schema<TaskEntity>(
   {
-    id: {
+    _id: {
       type: String,
     },
     title: {

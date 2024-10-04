@@ -1,3 +1,4 @@
+import { TaskDTO } from "@/domain/dtos/TaskDTO";
 import {
   AddTaskParams,
   DeleteTaskParams,
@@ -16,12 +17,19 @@ export class TaskController {
   ) {}
 
   @Get()
-  async getAllTaskController(): Promise<TaskEntity[] | any> {
+  async getAllTaskController(): Promise<TaskDTO[] | any> {
     const tasks = await this.taskService.getAll();
+    if(!tasks) {
+      return {
+        tasks: [],
+        total: 0
+      }
+    }
+
+    const tasksDTO = tasks.map((task: TaskEntity) => new TaskDTO(task))
 
     return {
-      tasks: tasks || [],
-      total: (tasks || []).length, //Total deberia ser un valor traigo de la base de datos si es que voy a paginar
+      tasks: tasksDTO
     };
   }
 
@@ -58,7 +66,9 @@ export class TaskController {
     @Param() id: string,
     @Body() data: UpdateTaskParams
   ): Promise<TaskEntity | any> {
+    console.log('id: ', id)
     const task = await this.taskService.update(id, data);
+    console.log('task...', task)
     if (!task) {
       return {
         message: "Task not found",
