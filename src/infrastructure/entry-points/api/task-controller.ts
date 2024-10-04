@@ -1,4 +1,3 @@
-import { TaskDTO } from "@/domain/dtos/TaskDTO";
 import {
   AddTaskParams,
   DeleteTaskParams,
@@ -17,7 +16,7 @@ export class TaskController {
   ) {}
 
   @Get()
-  async getAllTaskController(): Promise<TaskDTO[] | any> {
+  async getAllTaskController(): Promise<TaskEntity[] | any> {
     const tasks = await this.taskService.getAll();
     if(!tasks) {
       return {
@@ -25,17 +24,14 @@ export class TaskController {
         total: 0
       }
     }
-
-    const tasksDTO = tasks.map((task: TaskEntity) => new TaskDTO(task))
-
     return {
-      tasks: tasksDTO
+      tasks
     };
   }
 
   @Get(':id')
-  async getByIdTaskController(@Param() id: GetByIdTaskParams): Promise<TaskEntity | any> {
-    const task = await this.taskService.getById(id);
+  async getByIdTaskController(@Param() params: {id: GetByIdTaskParams},): Promise<TaskEntity | any> {
+    const task = await this.taskService.getById(params.id);
     if (!task)
       return {
         message: "Task not found",
@@ -63,11 +59,11 @@ export class TaskController {
 
   @Put(':id')
   async updateTaskController(
-    @Param() id: string,
+    @Param() params: {id: string},
     @Body() data: UpdateTaskParams
   ): Promise<TaskEntity | any> {
-    console.log('id: ', id)
-    const task = await this.taskService.update(id, data);
+    console.log(params)
+    const task = await this.taskService.update(params.id, data);
     console.log('task...', task)
     if (!task) {
       return {
@@ -93,6 +89,5 @@ export class TaskController {
   }
 }
 
-//DTO
 //ERRORES
 //TIPO PARA DEVOVLER MENSJAES

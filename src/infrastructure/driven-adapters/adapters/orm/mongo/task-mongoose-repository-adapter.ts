@@ -28,6 +28,11 @@ export class TaskMongoRepositoryAdapter {
   async update(id:string, data: UpdateTaskParams): Promise<TaskEntity> {
     console.log(data)
     console.log(id)
+    console.log(new mongoose.Types.ObjectId(id))
+    const test = await TaskModelSchema.findByIdAndUpdate(new mongoose.Types.ObjectId(id), data)
+    const test2 = await TaskModelSchema.findById(new mongoose.Types.ObjectId(id))
+    console.log(test)
+    console.log(test2)
     return TaskModelSchema.findByIdAndUpdate(new mongoose.Types.ObjectId(id), data)
   }
 }

@@ -3,7 +3,7 @@ import { TaskEntity } from "@/domain/entities/task";
 
 const schema = new Schema<TaskEntity>(
   {
-    _id: {
+    id: {
       type: String,
     },
     title: {
@@ -30,5 +30,13 @@ const schema = new Schema<TaskEntity>(
     },
   }
 );
+
+schema.set('toJSON', {
+  transform: function (_, ret, __) {
+      ret.id = ret._id;
+      delete ret._id;
+      delete ret.__v;
+  }
+}); 
 
 export const TaskModelSchema = model<TaskEntity>("tasks", schema);
