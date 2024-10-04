@@ -6,6 +6,7 @@ import {
   UpdateTaskParams,
 } from "@/domain/entities/task";
 import { ITaskService, TASK_SERVICES } from "@/domain/use-cases/task-service";
+import { CustomError } from "@/errors/customError";
 import { Mapping, Get, Adapter, Post, Body, Delete, Param, Put } from "@tsclean/core";
 
 @Mapping("api/v1/tasks")
@@ -30,7 +31,10 @@ export class TaskController {
   }
 
   @Get(':id')
-  async getByIdTaskController(@Param() params: {id: GetByIdTaskParams},): Promise<TaskEntity | any> {
+  async getByIdTaskController(@Param() params: {id: GetByIdTaskParams}): Promise<TaskEntity | any> {
+    if(params.id.length !== 24) {
+      throw new CustomError(400, 'Task id is not valid');
+    }
     const task = await this.taskService.getById(params.id);
     if (!task)
       return {
@@ -62,9 +66,7 @@ export class TaskController {
     @Param() params: {id: string},
     @Body() data: UpdateTaskParams
   ): Promise<TaskEntity | any> {
-    console.log(params)
     const task = await this.taskService.update(params.id, data);
-    console.log('task...', task)
     if (!task) {
       return {
         message: "Task not found",

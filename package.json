@@ -10,6 +10,7 @@
    "dependencies": {
       "@tsclean/core": "^1.10.13",
       "class-validator": "^0.14.1",
+      "cors": "^2.8.5",
       "dotenv": "^16.3.1",
       "helmet": "^7.0.0",
       "module-alias": "^2.2.3",
