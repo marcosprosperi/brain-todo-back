@@ -2,15 +2,14 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY . .
 
-RUN npm install
+RUN npm ci
 
-RUN npm install nodemon -g
+RUN npm run build
 
 COPY . .
 
 EXPOSE 9000
 
-CMD ["nodemon", "/dist/index.js"]
-        
+CMD ["node", "./dist/index.js"]
